@@ -1,0 +1,103 @@
+#include <WiFi.h>
+#include <WebServer.h>
+
+/**
+ * FrisbyRobot_WiFi.ino
+ * Controller: Seeed Studio XIAO ESP32-C3
+ * UI Bridge: Web Server based remote control
+ */
+
+#include "arduino_secrets.h"
+
+// --- CONFIGURATION (Safe Mode) ---
+const char* ssid = SECRET_SSID;
+const char* password = SECRET_PASS;
+
+WebServer server(80);
+
+// Pin Definitions using XIAO D-numbers
+const int ENA = D0; const int IN1 = D1; const int IN2 = D2;
+const int ENB = D3; const int IN3 = D4; const int IN4 = D5;
+const int LED_PIN = D10;
+
+void setup() {
+  pinMode(ENA, OUTPUT); pinMode(IN1, OUTPUT); pinMode(IN2, OUTPUT);
+  pinMode(ENB, OUTPUT); pinMode(IN3, OUTPUT); pinMode(IN4, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
+
+  Serial.begin(115200);
+  
+  // CONNECT TO WIFI
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi...");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500); Serial.print(".");
+    digitalWrite(LED_PIN, !digitalRead(LED_PIN)); // Blink while connecting
+  }
+  
+  Serial.println("\nCONNECTED!");
+  Serial.print("ROBOT IP: ");
+  Serial.println(WiFi.localIP());
+  digitalWrite(LED_PIN, LOW); // Solid ON when connected
+
+  // WEB SERVER ROUTES
+  server.on("/", handleRoot);
+  server.on("/move", handleMove);
+  server.on("/stop", handleStop);
+  server.on("/test", handleTest);
+  
+  // CORS (Required for Browser UI to talk to ESP32)
+  server.enableCORS();
+  
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+}
+
+// --- HANDLERS ---
+void handleRoot() { server.send(200, "text/plain", "Frisby Robot Online"); }
+
+void handleMove() {
+  String dir = server.arg("dir");
+  int speed = server.arg("speed").toInt();
+  if (speed == 0) speed = 150;
+
+  if (dir == "F") moveForward(speed);
+  else if (dir == "B") moveBackward(speed);
+  
+  server.send(200, "text/plain", "Moving: " + dir);
+}
+
+void handleStop() {
+  stopMotors();
+  server.send(200, "text/plain", "Stopped");
+}
+
+void handleTest() {
+  server.send(200, "text/plain", "Starting Test Routine...");
+  runTestSequence();
+}
+
+// --- MOTOR LOGIC ---
+void moveForward(int speed) {
+  digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); analogWrite(ENA, speed);
+  digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW); analogWrite(ENB, speed);
+}
+
+void moveBackward(int speed) {
+  digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH); analogWrite(ENA, speed);
+  digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH); analogWrite(ENB, speed);
+}
+
+void stopMotors() {
+  analogWrite(ENA, 0); analogWrite(ENB, 0);
+  digitalWrite(IN1, LOW); digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW); digitalWrite(IN4, LOW);
+}
+
+void runTestSequence() {
+  // Same sequence as before...
+  moveForward(200); delay(1000); stopMotors();
+}

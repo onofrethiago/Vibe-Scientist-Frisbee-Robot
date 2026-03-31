@@ -1,3 +1,10 @@
+/**
+ * main.js
+ * All code snippets and prompts are provided "as-is" under the Apache 2.0 License. 
+ * While the technical barriers to coding are lower, the responsibility for security, 
+ * compliance (including HIPAA/GDPR), and output accuracy remains strictly with the human-in-the-loop. 
+ * Copyright 2026 Thiago Borba Onofre, Licensed under the Apache License, Version 2.0
+ */
 import './style.css'
 
 // -- STATE AND DOM COFIG --

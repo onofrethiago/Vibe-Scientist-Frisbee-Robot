@@ -1,5 +1,5 @@
 /**
- * FrisbyRobot.ino
+ * FrisbeeRobot.ino
  * All code snippets and prompts are provided "as-is" under the Apache 2.0 License. 
  * While the technical barriers to coding are lower, the responsibility for security, 
  * compliance (including HIPAA/GDPR), and output accuracy remains strictly with the human-in-the-loop. 
@@ -37,7 +37,7 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
 
   Serial.begin(115200);
-  Serial.println("--- Frisby Robot Initialized ---");
+  Serial.println("--- Frisbee Robot Initialized ---");
   Serial.println("Commands: F (Forward), B (Backward), S (Stop), T (Test Routine)");
 }
 

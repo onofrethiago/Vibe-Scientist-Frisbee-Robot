@@ -10,14 +10,14 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Frisby Command Center</title>
+    <title>Frisbee Command Center</title>
   </head>
   <body>
     <div id="app">
       <header>
         <div class="logo">
           <div class="connecting-glow" id="status-indicator"></div>
-          FRISBY ROBOT <span>V1.3</span>
+          Frisbee ROBOT <span>V1.3</span>
         </div>
         <div class="robot-id" id="status-text">OFFLINE</div>
       </header>
@@ -29,8 +29,12 @@
           <div class="card settings">
             <label>Link Status</label>
             <div class="input-group">
-              <label for="esp-ip">Robot IP Address</label>
-              <input type="text" id="esp-ip" placeholder="e.g. 192.168.1.15" value="192.168.1.">
+              <label for="esp-ip">Robot Host/IP</label>
+              <input type="text" id="esp-ip" placeholder="Frisbee.local or IP" value="Frisbee.local">
+            </div>
+            <div class="input-group">
+              <label for="api-key">Shield Token (Key)</label>
+              <input type="password" id="api-key" placeholder="Enter API Key" value="">
             </div>
             <div class="input-group">
               <label for="motor-speed">Motor Speed (0-255)</label>

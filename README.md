@@ -1,4 +1,4 @@
-# Frisby Robot 🏎️
+# Frisbee Robot 🏎️
 
 > [!IMPORTANT]
 > **License & Disclaimer**: All code snippets and prompts are provided "as-is" under the Apache 2.0 License. While the technical barriers to coding are lower, the responsibility for security, compliance (including HIPAA/GDPR), and output accuracy remains strictly with the human-in-the-loop. Copyright 2026 Thiago Borba Onofre, Licensed under the Apache License, Version 2.0
@@ -21,7 +21,7 @@ This project controls two motors using a **Seeed Studio XIAO ESP32-C3** and an *
 
 1.  **Board Setup:** Install the `esp32` board core in Arduino IDE.
 2.  **Select Board:** Choose `XIAO_ESP32C3`.
-3.  **Upload:** Flash the `FrisbyRobot.ino` file.
+3.  **Upload:** Flash the `FrisbeeRobot.ino` file.
 4.  **Control:** Open Serial Monitor (115200 baud) and type:
     *   `F` - Forward
     *   `B` - Backward

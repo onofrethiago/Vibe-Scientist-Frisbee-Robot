@@ -9,7 +9,7 @@
  * Spins motors individually and together in both directions.
  */
 
-// Pin Definitions (matching FrisbyRobot.ino)
+// Pin Definitions (matching FrisbeeRobot.ino)
 const int ENA = D0; // Motor A Speed (PWM)
 const int IN1 = D1; // Motor A Dir 1
 const int IN2 = D2; // Motor A Dir 2

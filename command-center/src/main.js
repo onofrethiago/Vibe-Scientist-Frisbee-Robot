@@ -10,6 +10,7 @@ import './style.css'
 // -- STATE AND DOM COFIG --
 const elements = {
   ip: document.getElementById('esp-ip'),
+  apiKey: document.getElementById('api-key'),
   speed: document.getElementById('motor-speed'),
   status: document.getElementById('status-text'),
   indicator: document.getElementById('status-indicator'),
@@ -21,14 +22,20 @@ const elements = {
   btnStop: document.getElementById('btn-stop')
 };
 
-// -- PERSIST IP --
+// -- PERSIST CONFIG --
 const savedIP = localStorage.getItem('esp32_ip');
+const savedKey = localStorage.getItem('esp32_key');
 if (savedIP) elements.ip.value = savedIP;
-else elements.ip.value = 'frisby.local';
+else elements.ip.value = 'Frisbee.local';
+if (savedKey) elements.apiKey.value = savedKey;
 
 elements.ip.addEventListener('change', () => {
   localStorage.setItem('esp32_ip', elements.ip.value);
   addLog(`REMOTE IP UPDATED: ${elements.ip.value}`);
+});
+elements.apiKey.addEventListener('change', () => {
+  localStorage.setItem('esp32_key', elements.apiKey.value);
+  addLog('SHIELD KEY UPDATED');
 });
 
 // -- LOGGING UTILITY --
@@ -43,13 +50,14 @@ function addLog(msg, active = false) {
 async function sendCommand(action, params = {}) {
   const ip = elements.ip.value.trim();
   const speed = elements.speed.value;
+  const key = elements.apiKey.value.trim();
   
   if (!ip) {
     addLog('SYSTEM ERROR: NO TARGET IP CONFIGURED');
     return;
   }
 
-  const queryParams = new URLSearchParams({ ...params, speed });
+  const queryParams = new URLSearchParams({ ...params, speed, key });
   const url = `http://${ip}/${action}?${queryParams.toString()}`;
 
   try {

@@ -2,7 +2,7 @@
 #include <WebServer.h>
 
 /**
- * FrisbyRobot_WiFi.ino
+ * FrisbeeRobot_WiFi.ino
  * All code snippets and prompts are provided "as-is" under the Apache 2.0 License. 
  * While the technical barriers to coding are lower, the responsibility for security, 
  * compliance (including HIPAA/GDPR), and output accuracy remains strictly with the human-in-the-loop. 
@@ -62,7 +62,7 @@ void loop() {
 }
 
 // --- HANDLERS ---
-void handleRoot() { server.send(200, "text/plain", "Frisby Robot Online"); }
+void handleRoot() { server.send(200, "text/plain", "Frisbee Robot Online"); }
 
 void handleMove() {
   String dir = server.arg("dir");

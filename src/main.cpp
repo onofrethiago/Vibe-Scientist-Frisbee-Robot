@@ -5,7 +5,7 @@
 #include "arduino_secrets.h"
 
 /**
- * FrisbyRobot.cpp
+ * FrisbeeRobot.cpp
  * All code snippets and prompts are provided "as-is" under the Apache 2.0 License. 
  * While the technical barriers to coding are lower, the responsibility for security, 
  * compliance (including HIPAA/GDPR), and output accuracy remains strictly with the human-in-the-loop. 
@@ -56,14 +56,14 @@ void setup() {
     digitalWrite(LED_PIN, !digitalRead(LED_PIN)); 
   }
   
-  Serial.println("\n--- Frisby Robot ONLINE ---");
+  Serial.println("\n--- Frisbee Robot ONLINE ---");
   Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
   digitalWrite(LED_PIN, LOW); // Solid ON when connected
 
-  // INITIALIZE mDNS (frisby.local)
-  if (MDNS.begin("frisby")) {
-    Serial.println("mDNS responder started: frisby.local");
+  // INITIALIZE mDNS (Frisbee.local)
+  if (MDNS.begin("Frisbee")) {
+    Serial.println("mDNS responder started: Frisbee.local");
   }
 
   // WEB SERVER ROUTES
@@ -94,13 +94,24 @@ void loop() {
 
 // --- HANDLERS ---
 void handleRoot() { 
-  server.send(200, "text/plain", "Frisby Robot Online"); 
+  server.send(200, "text/plain", "Frisbee Robot Online"); 
+}
+
+// -- AUTH HELPER --
+bool hasValidKey() {
+  if (server.arg("key") == SECRET_API_KEY) return true;
+  server.send(401, "text/plain", "ACCESS DENIED: INVALID SHIELD KEY");
+  return false;
 }
 
 void handleMove() {
+  if (!hasValidKey()) return;
+  
   String dir = server.arg("dir");
   int speed = server.arg("speed").toInt();
-  if (speed == 0) speed = 150;
+  
+  // DEFENSE: Range Clamping [0, 255]
+  speed = constrain(speed, 0, 255);
 
   if (dir == "F") {
     moveForward(speed);
@@ -120,11 +131,13 @@ void handleMove() {
 }
 
 void handleStop() {
+  if (!hasValidKey()) return;
   stopMotors();
   server.send(200, "text/plain", "Stopped");
 }
 
 void handleTest() {
+  if (!hasValidKey()) return;
   server.send(200, "text/plain", "Starting Routine...");
   runTestSequence();
 }
